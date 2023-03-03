@@ -16,8 +16,17 @@ export default function ContextProvider(props) {
 
   // console.log(photoArray)
 
+  function toggleFavorite(id,bool) {
+    setPhotoArray(prevArray => 
+        prevArray.map(
+          item=>({...item,isFavorite:(item.id===id?bool:item.isFavorite)})))
+  }
+
+  console.log(photoArray)
+
   return (
-    <fullContext.Provider value={{photoArray}}>
+    <fullContext.Provider 
+      value={{photoArray:photoArray,toggleFavorite:toggleFavorite}}>
         {props.children}
     </fullContext.Provider>
   )

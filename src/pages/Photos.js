@@ -4,7 +4,7 @@ import {fullContext} from '../components/Context.js'
 import {getClass} from '../utils/index'
 
 export default function Photos() {
-  const {photoArray} = React.useContext(fullContext);
+  const {photoArray,toggleFavorite} = React.useContext(fullContext);
 
   // console.log(photoArray)
 
@@ -13,6 +13,7 @@ export default function Photos() {
       key={item.id} 
       id={item.id} 
       img={item}
+      toggleFavorite={toggleFavorite}
       className={getClass(index)}
        />
   ))
