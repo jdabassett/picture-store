@@ -22,7 +22,7 @@ export default function ContextProvider(props) {
           item=>({...item,isFavorite:(item.id===id?bool:item.isFavorite)})))
   }
 
-  console.log(photoArray)
+  // console.log(photoArray)
 
   return (
     <fullContext.Provider 
