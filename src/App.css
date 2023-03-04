@@ -25,6 +25,10 @@ main.cart-page {
   padding: 10px;
 }
 
+.cart-icon {
+  font-size:1.8em;
+}
+
 .cart-page > h1 {
   text-align: center;
 }

@@ -1,12 +1,13 @@
 import React from 'react';
-import { FaHeart, FaRegHeart,FaCartPlus,FaShoppingCart} from 'react-icons/fa';
+import { FaHeart, FaRegHeart} from 'react-icons/fa';
+import {BsCart,BsCartFill} from 'react-icons/bs'
 import PropTypes from 'prop-types'
 
 
 export default function Image({className,img,id,toggleFavorite,addImageToCart,removeImageFromCart}) {
   const [hoverState,setHoverState] = React.useState(false);
-  const [favorited,setFavorited] = React.useState(false);
-  const [inCart,setInCart] =React.useState(0);
+  const [favorited,setFavorited] = React.useState(img.isFavorite);
+  const [inCart,setInCart] =React.useState(img.inCart);
 
   return (
     <div       
@@ -23,9 +24,9 @@ export default function Image({className,img,id,toggleFavorite,addImageToCart,re
        
       {hoverState && !favorited && <FaRegHeart className="favorite" onClick={()=>{setFavorited(true);toggleFavorite(id,true)}}/>}
 
-      {inCart && <FaShoppingCart className="cart" onClick={()=>{setInCart(false); removeImageFromCart()}}/>}
+      {inCart && <BsCartFill className="cart" onClick={()=>{setInCart(false); removeImageFromCart()}}/>}
 
-      {hoverState && !inCart && <FaCartPlus className="cart" onClick={()=>{setInCart(true); addImageToCart()}}/>}
+      {hoverState && !inCart && <BsCart className="cart" onClick={()=>{setInCart(true); addImageToCart()}}/>}
 
     </div>
   )
