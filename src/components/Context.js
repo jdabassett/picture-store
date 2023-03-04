@@ -6,15 +6,25 @@ const fullContext = React.createContext();
 
 export default function ContextProvider(props) {
   // const [preliminaryArray,setPreliminaryArray] = React.useState([]);
-  const [photoArray,setPhotoArray] = React.useState([]);
+  const [photoArray,setPhotoArray] = React.useState((JSON.parse(localStorage.getItem('photoArray')) || []));
   const [cartArray,setCartArray] = React.useState([]);
+  const [cartTotal,setCartTotal] = React.useState(0);
 
   React.useEffect(()=>{
-    fetch("https://raw.githubusercontent.com/bobziroll/scrimba-react-bootcamp-images/master/images.json")
-    .then(res=>res.json()) 
-    .then(data => setPhotoArray(data.map(item => ({...item,inCart:false}))))
-    .catch((err)=>console.log(err))
+    if (cartArray.length===0) {
+      fetch("https://raw.githubusercontent.com/bobziroll/scrimba-react-bootcamp-images/master/images.json")
+      .then(res=>res.json()) 
+      .then(data => setPhotoArray(data.map(item => ({...item,inCart:false,price:2.49}))))
+      .catch((err)=>console.log(err))
+    } 
   },[])
+
+  React.useEffect(()=>{
+    let newCart = photoArray.filter(item => item.inCart===true)
+    setCartArray(newCart)
+    setCartTotal(newCart.reduce((a,b)=>{return a+b.price},0 ))
+    localStorage.setItem('photoArray',JSON.stringify(photoArray))
+  },[photoArray])
 
   function toggleFavorite(id,bool) {
     // console.log('toggleFavorite')
@@ -29,15 +39,12 @@ export default function ContextProvider(props) {
   }
 
   function removeImageFromCart(obj) {
-    console.log('removeImageFromCart')
+    // console.log('removeImageFromCart')
     setPhotoArray(prevArray => prevArray.map(item => ({...item,inCart:(item.id===obj.id)?false:item.inCart})))
   }
 
-  React.useEffect(()=>{
-    setCartArray(photoArray.filter(item => item.inCart===true))
-  },[photoArray])
-
-  console.log(cartArray)
+  // console.log(cartTotal)
+  // console.log(cartArray)
   // console.log(photoArray)
 
   return (
@@ -45,6 +52,7 @@ export default function ContextProvider(props) {
       value={{
           photoArray:photoArray,
           cartArray:cartArray,
+          cartTotal:cartTotal,
           toggleFavorite:toggleFavorite,
           addImageToCart:addImageToCart,
           removeImageFromCart:removeImageFromCart
