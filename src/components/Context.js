@@ -6,6 +6,7 @@ const fullContext = React.createContext();
 
 export default function ContextProvider(props) {
   const [photoArray,setPhotoArray] = React.useState([]);
+  const [cartArray,setCartArray] = React.useState([]);
 
   React.useEffect(()=>{
     fetch("https://raw.githubusercontent.com/bobziroll/scrimba-react-bootcamp-images/master/images.json")
@@ -22,11 +23,27 @@ export default function ContextProvider(props) {
           item=>({...item,isFavorite:(item.id===id?bool:item.isFavorite)})))
   }
 
+  function addImageToCart(obj) {
+    console.log('addImageToCart was clicked')
+    setCartArray(prevArray => ([...prevArray,obj]))
+  }
+
+  function removeImageFromCart(obj) {
+    console.log('removeImageFromCart was clicked')
+    setCartArray(prevArray => prevArray.filter(item => item.id!==obj.id))
+  }
+
+  console.log(cartArray)
   // console.log(photoArray)
 
   return (
     <fullContext.Provider 
-      value={{photoArray:photoArray,toggleFavorite:toggleFavorite}}>
+      value={{
+          photoArray:photoArray,
+          toggleFavorite:toggleFavorite,
+          addImageToCart:addImageToCart,
+          removeImageFromCart:removeImageFromCart
+          }}>
         {props.children}
     </fullContext.Provider>
   )
