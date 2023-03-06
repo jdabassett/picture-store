@@ -10,7 +10,7 @@ function CartItem({item}){
       <AiOutlineDelete
         onClick={()=>removeImageFromCart(item)} />
       <img src={item.url} alt={item.url} width="130px" />
-      <p>{`\$${item.price}`}</p>
+      <p>{`$${item.price}`}</p>
     </div>
   )
 }

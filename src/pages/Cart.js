@@ -11,7 +11,7 @@ export default function Cart() {
     <main className='cart-page'>
       <h1>Check out</h1>
       {Elements}
-      <p className="total-cost">{`Total: \$${cartTotal}`}</p>
+      <p className="total-cost">{`Total: $${cartTotal}`}</p>
             <div className="order-button">
                 <button>Place Order</button>
       </div>
