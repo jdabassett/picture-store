@@ -5,26 +5,30 @@ const fullContext = React.createContext();
 
 
 export default function ContextProvider(props) {
-  // const [preliminaryArray,setPreliminaryArray] = React.useState([]);
-  const [photoArray,setPhotoArray] = React.useState((JSON.parse(localStorage.getItem('photoArray')) || []));
-  const [cartArray,setCartArray] = React.useState((JSON.parse(localStorage.getItem("cartArray")) || []));
+  const [photoArray,setPhotoArray] = React.useState([]);
+  const [cartArray,setCartArray] = React.useState(([]));
   const [cartTotal,setCartTotal] = React.useState(0);
 
   React.useEffect(()=>{
+   
       fetch("https://raw.githubusercontent.com/bobziroll/scrimba-react-bootcamp-images/master/images.json")
       .then(res=>res.json()) 
-      .then(data => setPhotoArray(data.map(item => ({...item,inCart:false,price:2.49}))))
+      .then(data => setPhotoArray(data.map(item => ({...item,price:2.49}))))
       .catch((err)=>console.log(err))
-    
-  },[])
+
+      // setCartArray(JSON.parse(localStorage.getItem("cartArray")))
+
+  },[setPhotoArray,setCartArray])
 
   React.useEffect(()=>{
-    let newCart = photoArray.filter(item => item.inCart===true)
-    setCartArray(newCart)
-    setCartTotal(newCart.reduce((a,b)=>{return a+b.price},0 ))
-    localStorage.setItem('photoArray',JSON.stringify(photoArray))
-    localStorage.setItem("cartArray",JSON.stringify(cartArray))
-  },[photoArray,cartArray])
+    
+    setCartTotal((cartArray.reduce((a,b)=>{return a+b.price},0 )).toFixed(2))
+
+    // localStorage.setItem("cartArray",JSON.stringify())
+    
+  },[cartArray,setCartTotal])
+
+
 
   function toggleFavorite(id,bool) {
     // console.log('toggleFavorite')
@@ -35,12 +39,20 @@ export default function ContextProvider(props) {
 
   function addImageToCart(obj) {
     // console.log('addImageToCart')
-    setPhotoArray(prevArray => prevArray.map(item => ({...item,inCart:(item.id===obj.id)?true:item.inCart})))
+    if (!cartArray.includes(obj)){
+        setCartArray(prevArray=>([...prevArray,obj]))}
+    setPhotoArray(prevArray => prevArray.map(item =>({...item,inCart:(item.id===obj.id)?true:null})))
   }
 
   function removeImageFromCart(obj) {
     // console.log('removeImageFromCart')
-    setPhotoArray(prevArray => prevArray.map(item => ({...item,inCart:(item.id===obj.id)?false:item.inCart})))
+    setCartArray(prevArray => prevArray.filter(item => item.id!==obj.id))
+    setPhotoArray(prevArray => prevArray.map(item =>({...item,inCart:(item.id===obj.id)?false:null})))
+  }
+
+  function clearCart() {
+    setCartArray([])
+    setPhotoArray(prevArray => prevArray.map(item => ({...item,inCart:null})))
   }
 
   // console.log(cartTotal)
@@ -55,7 +67,8 @@ export default function ContextProvider(props) {
           cartTotal:cartTotal,
           toggleFavorite:toggleFavorite,
           addImageToCart:addImageToCart,
-          removeImageFromCart:removeImageFromCart
+          removeImageFromCart:removeImageFromCart,
+          clearCart:clearCart
           }}>
         {props.children}
     </fullContext.Provider>
