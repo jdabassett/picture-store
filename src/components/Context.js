@@ -7,7 +7,7 @@ const fullContext = React.createContext();
 export default function ContextProvider(props) {
   // const [preliminaryArray,setPreliminaryArray] = React.useState([]);
   const [photoArray,setPhotoArray] = React.useState((JSON.parse(localStorage.getItem('photoArray')) || []));
-  const [cartArray,setCartArray] = React.useState((JSON.parse(localStorage.getItem("cartArray"))||[]));
+  const [cartArray,setCartArray] = React.useState((JSON.parse(localStorage.getItem("cartArray")) || []));
   const [cartTotal,setCartTotal] = React.useState(0);
 
   React.useEffect(()=>{
