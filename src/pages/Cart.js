@@ -6,7 +6,7 @@ export default function Cart() {
   const {cartArray,cartTotal,clearCart} = React.useContext(fullContext);
   const [buttonText,setButtonText] = React.useState("Place Order");
 
-  console.log(buttonText)
+  // console.log(buttonText)
 
   function handlerOrdering() {
     setButtonText("Ordering...");
