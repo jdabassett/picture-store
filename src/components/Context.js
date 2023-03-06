@@ -21,10 +21,10 @@ export default function ContextProvider(props) {
   React.useEffect(()=>{
     let newCart = photoArray.filter(item => item.inCart===true)
     setCartArray(newCart)
-    setCartTotal(newCart.reduce((a,b)=>{return a+b.price},0 ))
+    setCartTotal((newCart.reduce((a,b)=>{return a+b.price},0 )).toFixed(2))
     localStorage.setItem('photoArray',JSON.stringify(photoArray))
     localStorage.setItem("cartArray",JSON.stringify(cartArray))
-  },[photoArray,cartArray])
+  },[photoArray])
 
   function toggleFavorite(id,bool) {
     // console.log('toggleFavorite')
@@ -43,6 +43,10 @@ export default function ContextProvider(props) {
     setPhotoArray(prevArray => prevArray.map(item => ({...item,inCart:(item.id===obj.id)?false:item.inCart})))
   }
 
+  function clearCart() {
+    setPhotoArray(prevArray => prevArray.map(item => ({...item,inCart:false})))
+  }
+
   // console.log(cartTotal)
   // console.log(cartArray)
   // console.log(photoArray)
@@ -55,7 +59,8 @@ export default function ContextProvider(props) {
           cartTotal:cartTotal,
           toggleFavorite:toggleFavorite,
           addImageToCart:addImageToCart,
-          removeImageFromCart:removeImageFromCart
+          removeImageFromCart:removeImageFromCart,
+          clearCart:clearCart
           }}>
         {props.children}
     </fullContext.Provider>
